@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Estrazione Tombola</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.2/css/bootstrap.min.css" integrity="sha512-wu0LkjZgW+aM8ko0/LJ+0yF9oQchWYcTq3RX1AMU6wya/g2x//U6zzqE6Bhhc39m9gGWbWwyxC8/cvDYHgveiw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <style>
+    body {
+      background-color: rgb(42, 61, 112);
+      color: white;
+    }
+    .title {
+      text-align: center;
+    }
+    table {
+      border: 1px solid white;
+      margin: 0 auto;
+    }
+    th, td {
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1 class="title mt-5 mb-4">Estrazione Tombola</h1>
+    <table class="table table-striped table-bordered">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col" class="light">Numero estratto</th>
+        </tr>
+      </thead>
+      <tbody id="numeri-estratti">
+      </tbody>
+    </table>
+  </div>
+  <script>
+    const socket = new WebSocket('ws://localhost:8080');
+
+    socket.addEventListener('open', (event) => {
+      console.log('connessione al server avvenuta con successo');
+    });
+
+    socket.addEventListener('message', (event) => {
+      const numero = event.data;
+      const listaNumeri = document.getElementById('numeri-estratti');
+      const nuovoElemento = document.createElement('tr');
+      const cellaIndice = document.createElement('th');
+      const cellaNumero = document.createElement('td');
+      cellaIndice.setAttribute('scope', 'row');
+      cellaIndice.textContent = listaNumeri.children.length + 1;
+      cellaNumero.textContent = numero;
+      nuovoElemento.appendChild(cellaIndice);
+      nuovoElemento.appendChild(cellaNumero);
+      listaNumeri.appendChild(nuovoElemento);
+    });
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.2/js/bootstrap.bundle.min.js" integrity="sha512-NliFNcKj9Xa8WUIM/L0gjKZAJx5QQ5S8dkC6OvDK6OQLdsGldyX4ahfymPQoYkZzGr1ZGtF/0KQ2MvNyImtbNA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</body>
+</html>
